@@ -9,11 +9,14 @@ export class GifsService {
   public gifList: Gif[] = []; // contiene la lista de los gifs que se muestran.
 
   private _tagsHistory: string [] = []
-  private apiKey: string = "rji633dIuZ8DfJ1omg8jO1r3Mr7bL5KT"; //  api url
-  private serviceUrl: string ="https://api.giphy.com/v1/gifs"; // gif url
+  private apiKey:       string = "rji633dIuZ8DfJ1omg8jO1r3Mr7bL5KT"; //  api url
+  private serviceUrl:   string ="https://api.giphy.com/v1/gifs"; // gif url
 
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    this.loadLocalStorage();
+    console.log('Gifs Servive Ready');
+  }
 
   get tagHistory(){
     return [...this._tagsHistory]; // usamos spread
@@ -30,8 +33,25 @@ export class GifsService {
 
     this._tagsHistory.unshift(tag) // agregamos el nuevo tag al inicio del arreglo
     this._tagsHistory = this._tagsHistory.splice(0,10);
+    this.saveLocalStorage();
+  }
+
+  // método para gravar en el local storage el historial
+  private saveLocalStorage(): void{
+    //JSON.stringify convierte un objeto o arreglo a string
+    localStorage.setItem('history', JSON.stringify(this._tagsHistory))
+  }
+
+  private loadLocalStorage(): void{
+    if (!localStorage.getItem('history')) return;
+
+    this._tagsHistory = JSON.parse(localStorage.getItem('history')! )
+
+    if(this._tagsHistory.length === 0 ) return;
+    this.searchTag(this._tagsHistory[0]);
 
   }
+
 
 
   searchTag(tag: string): void{
@@ -50,7 +70,7 @@ export class GifsService {
         this.gifList = resp.data;
         /* console.log({gifs: this.gifList }); */
 
-        
+
       })
   }
 
