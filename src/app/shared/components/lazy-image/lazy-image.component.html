@@ -1,0 +1,22 @@
+<div class="d-flex justify-content-center">
+  <!--
+    el método load es cuando se carga la imágen
+    entonces se llama la función onLoad()
+   -->
+  <img
+    class="card-img-top"
+    [src]="url"
+    [alt]="alt"
+    (load)="onLoad()"
+    [ngStyle]=" {display: hasLoaded ? '': 'none' } "
+  >
+
+  <img
+  *ngIf="hasLoaded === false"
+    src="/assets/loader.svg"
+    height="35"
+    width="35"
+    class="mt-3"
+  >
+
+</div>

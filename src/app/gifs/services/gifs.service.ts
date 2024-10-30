@@ -56,8 +56,6 @@ export class GifsService {
 
   searchTag(tag: string): void{
 
-    if(tag.length === 0) return;
-    this.organizedHistory(tag)
 
     const params = new HttpParams()
       .set('api_key', this.apiKey)
